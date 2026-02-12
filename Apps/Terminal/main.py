@@ -45,10 +45,10 @@ class Terminal:
             neonpulse.set_color(0x0A)  # Green
             neonpulse.print(f"{self.current_dir} ")
             neonpulse.set_color(0x0F)  # White
-            neonpulse.print("> ")
+            neonpulse.print(": ")
             neonpulse.set_color(0x07)  # Light grey
         else:
-            print(f"{self.current_dir} > ", end='')
+            print(f"{self.current_dir} : ", end='')
     
     def execute_command(self, cmd):
         """Execute a shell command"""
