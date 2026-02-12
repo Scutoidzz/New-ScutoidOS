@@ -1,0 +1,10 @@
+{
+  "name": "Terminal",
+  "display_name": "Terminal",
+  "version": "1.0.0",
+  "type": "application",
+  "main": "main.py",
+  "description": "Command-line interface for ScutoidOS",
+  "author": "ScutoidOS",
+  "category": "System"
+}

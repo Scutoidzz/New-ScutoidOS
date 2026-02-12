@@ -1,0 +1,10 @@
+{
+    "name": "TextEdit",
+    "display_name": "TextEdit",
+    "version": "1.0.0",
+    "type": "application",
+    "main": "main.py",
+    "description": "Simple text editor for ScutoidOS",
+    "author": "ScutoidOS",
+    "category": "Productivity"
+}
