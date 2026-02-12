@@ -58,6 +58,8 @@ void kernel_main(void) {
 
     prompt();
 
+    __asm__ volatile("sti");  // Enable interrupts
+
     while (1) {
         if (kb_available()) {
             unsigned char sc = kb_read();
@@ -274,8 +276,20 @@ void run_command(void) {
         kprint("\n");
     }
     else if (kstrcmp(cmd, "reboot") == 0) {
-        __asm__ volatile("lidt (%%eax)" :: "a"(0));
-        __asm__ volatile("int $3");
+        // Reboot by sending 0xFE to keyboard controller
+        __asm__ volatile(
+            "mov $0x64, %%dx\n\t"
+            "wait1:\n\t"
+            "in %%dx, %%al\n\t"
+            "test $0x02, %%al\n\t"
+            "jnz wait1\n\t"
+            "mov $0xFE, %%al\n\t"
+            "out %%al, %%dx\n\t"
+            :
+            :
+            : "al", "dx"
+        );
+        while(1) { __asm__ volatile("hlt"); }
     }
     else {
         kprint("? ");
