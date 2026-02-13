@@ -2,7 +2,7 @@
 # terminal shell for scutoidos
 
 try:
-    import neonpulse
+    import scutoid
     HW = True
 except ImportError:
     HW = False
@@ -18,17 +18,17 @@ class Terminal:
 
     def prompt(self):
         if HW:
-            neonpulse.set_color(0x0A)
-            neonpulse.print(self.cwd + " ")
-            neonpulse.set_color(0x07)
-            neonpulse.print("$ ")
+            scutoid.set_color(0x0A)
+            scutoid.print(self.cwd + " ")
+            scutoid.set_color(0x07)
+            scutoid.print("$ ")
         else:
             print(f"{self.cwd} $ ", end='')
 
     def out(self, text):
         if HW:
-            neonpulse.set_color(0x07)
-            neonpulse.print(text)
+            scutoid.set_color(0x07)
+            scutoid.print(text)
         else:
             print(text, end='')
 
@@ -42,7 +42,7 @@ class Terminal:
         if cmd == "help":
             self.out("  help, clear, ls, cd, pwd, echo, uname, apps, exit\n")
         elif cmd in ("clear", "cls"):
-            if HW: neonpulse.clear()
+            if HW: scutoid.clear()
             else: os.system('clear' if os.name == 'posix' else 'cls')
         elif cmd == "ls":
             self.do_ls()
@@ -89,7 +89,7 @@ class Terminal:
 
     def on_key(self, ch):
         if ch == '\n':
-            if HW: neonpulse.print("\n")
+            if HW: scutoid.print("\n")
             else: print()
             if self.buf:
                 self.history.append(self.buf)
@@ -101,19 +101,19 @@ class Terminal:
             if self.buf:
                 self.buf = self.buf[:-1]
                 if HW:
-                    neonpulse.print("\b \b")
+                    scutoid.print("\b \b")
         else:
             self.buf += ch
-            if HW: neonpulse.print(ch)
+            if HW: scutoid.print(ch)
             else: print(ch, end='', flush=True)
 
     def run(self):
         if HW:
-            neonpulse.clear()
-            neonpulse.set_color(0x0B)
-            neonpulse.print("ScutoidOS Terminal\n")
-            neonpulse.set_color(0x07)
-            neonpulse.print("type 'help'\n\n")
+            scutoid.clear()
+            scutoid.set_color(0x0B)
+            scutoid.print("ScutoidOS Terminal\n")
+            scutoid.set_color(0x07)
+            scutoid.print("type 'help'\n\n")
         else:
             print("ScutoidOS Terminal (test mode)")
             print("type 'help'\n")
@@ -130,12 +130,12 @@ class Terminal:
                     break
         else:
             while self.running:
-                if neonpulse.keyboard_available():
-                    sc = neonpulse.keyboard_read()
+                if scutoid.keyboard_available():
+                    sc = scutoid.keyboard_read()
                     if sc < 128:
-                        ch = neonpulse.scancode_to_ascii(sc)
+                        ch = scutoid.scancode_to_ascii(sc)
                         if ch: self.on_key(ch)
-                neonpulse.halt()
+                scutoid.halt()
 
 def main():
     Terminal().run()

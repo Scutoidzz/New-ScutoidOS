@@ -4,10 +4,10 @@
 import sys
 
 try:
-    import neonpulse
+    import scutoid
 except ImportError:
-    print("no neonpulse module, running in test mode")
-    neonpulse = None
+    print("no scutoid module, running in test mode")
+    scutoid = None
 
 class Shell:
     def __init__(self):
@@ -18,8 +18,8 @@ class Shell:
         if ch == '\n':
             self.dispatch(self.buf)
             self.buf = ""
-            if neonpulse:
-                neonpulse.print("> ")
+            if scutoid:
+                scutoid.print("> ")
         elif ch == '\b':
             if self.buf:
                 self.buf = self.buf[:-1]
@@ -38,25 +38,25 @@ class Shell:
         elif cmd == "mem":
             self.show_mem()
         elif cmd == "clear":
-            if neonpulse: neonpulse.clear()
+            if scutoid: scutoid.clear()
         elif cmd == "colors":
             self.show_colors()
         elif cmd.startswith("echo "):
-            if neonpulse:
-                neonpulse.print(cmd[5:] + "\n")
+            if scutoid:
+                scutoid.print(cmd[5:] + "\n")
         elif cmd == "shutdown":
-            if neonpulse:
-                neonpulse.print("bye.\n")
+            if scutoid:
+                scutoid.print("bye.\n")
             self.running = False
         else:
-            if neonpulse:
-                neonpulse.print(f"? {cmd}\n")
+            if scutoid:
+                scutoid.print(f"? {cmd}\n")
 
     def show_help(self):
-        if not neonpulse: return
-        neonpulse.set_color(0x0E)
-        neonpulse.print("commands:\n")
-        neonpulse.set_color(0x07)
+        if not scutoid: return
+        scutoid.set_color(0x0E)
+        scutoid.print("commands:\n")
+        scutoid.set_color(0x07)
         for line in [
             "  help      - this",
             "  about     - system info",
@@ -66,24 +66,24 @@ class Shell:
             "  echo X    - print X",
             "  shutdown  - halt",
         ]:
-            neonpulse.print(line + "\n")
+            scutoid.print(line + "\n")
 
     def show_about(self):
-        if not neonpulse: return
-        neonpulse.set_color(0x0B)
-        neonpulse.print("ScutoidOS v0.1\n")
-        neonpulse.set_color(0x07)
-        neonpulse.print("python on bare metal, x86\n")
+        if not scutoid: return
+        scutoid.set_color(0x0B)
+        scutoid.print("ScutoidOS v0.1\n")
+        scutoid.set_color(0x07)
+        scutoid.print("python on bare metal, x86\n")
 
     def show_mem(self):
-        if not neonpulse: return
-        sp = neonpulse.get_stack_pointer()
-        neonpulse.print(f"stack:  0x{sp:08X}\n")
-        neonpulse.print(f"kernel: 0x00010000\n")
-        neonpulse.print(f"vga:    0x000B8000\n")
+        if not scutoid: return
+        sp = scutoid.get_stack_pointer()
+        scutoid.print(f"stack:  0x{sp:08X}\n")
+        scutoid.print(f"kernel: 0x00010000\n")
+        scutoid.print(f"vga:    0x000B8000\n")
 
     def show_colors(self):
-        if not neonpulse: return
+        if not scutoid: return
         names = [
             "black", "blue", "green", "cyan",
             "red", "magenta", "brown", "grey",
@@ -91,26 +91,26 @@ class Shell:
             "lt red", "lt magenta", "yellow", "white"
         ]
         for i, name in enumerate(names):
-            neonpulse.set_color(i)
-            neonpulse.print(f"  {name}\n")
-        neonpulse.set_color(0x07)
+            scutoid.set_color(i)
+            scutoid.print(f"  {name}\n")
+        scutoid.set_color(0x07)
 
     def run(self):
-        if neonpulse:
-            neonpulse.clear()
-            neonpulse.set_color(0x0B)
-            neonpulse.print("ScutoidOS shell\n")
-            neonpulse.set_color(0x07)
-            neonpulse.print("type 'help'\n\n> ")
+        if scutoid:
+            scutoid.clear()
+            scutoid.set_color(0x0B)
+            scutoid.print("ScutoidOS shell\n")
+            scutoid.set_color(0x07)
+            scutoid.print("type 'help'\n\n> ")
         
         while self.running:
-            if neonpulse:
-                if neonpulse.keyboard_available():
-                    sc = neonpulse.keyboard_read()
-                    ch = neonpulse.scancode_to_ascii(sc)
+            if scutoid:
+                if scutoid.keyboard_available():
+                    sc = scutoid.keyboard_read()
+                    ch = scutoid.scancode_to_ascii(sc)
                     if ch:
                         self.on_key(ch)
-                neonpulse.halt()
+                scutoid.halt()
             else:
                 print("shell ready (test mode)")
                 break

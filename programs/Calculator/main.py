@@ -2,7 +2,7 @@
 # calculator for scutoidos
 
 try:
-    import neonpulse
+    import scutoid
     HW = True
 except ImportError:
     HW = False
@@ -16,15 +16,15 @@ class Calc:
 
     def draw(self):
         if HW:
-            neonpulse.clear()
-            neonpulse.set_color(0x0E)
-            neonpulse.print("calculator\n")
-            neonpulse.set_color(0x0F)
-            neonpulse.print(f"  {self.display}\n\n")
-            neonpulse.set_color(0x07)
-            neonpulse.print("7 8 9 /\n4 5 6 *\n1 2 3 -\n0 . = +\n")
-            neonpulse.set_color(0x08)
-            neonpulse.print("\nc=clear q=quit\n")
+            scutoid.clear()
+            scutoid.set_color(0x0E)
+            scutoid.print("calculator\n")
+            scutoid.set_color(0x0F)
+            scutoid.print(f"  {self.display}\n\n")
+            scutoid.set_color(0x07)
+            scutoid.print("7 8 9 /\n4 5 6 *\n1 2 3 -\n0 . = +\n")
+            scutoid.set_color(0x08)
+            scutoid.print("\nc=clear q=quit\n")
         else:
             print(f"\n[ {self.display} ]")
             print("7 8 9 / | 4 5 6 * | 1 2 3 - | 0 . = +")
@@ -103,14 +103,14 @@ class Calc:
             return
 
         while True:
-            if neonpulse.keyboard_available():
-                sc = neonpulse.keyboard_read()
-                ch = neonpulse.scancode_to_ascii(sc)
+            if scutoid.keyboard_available():
+                sc = scutoid.keyboard_read()
+                ch = scutoid.scancode_to_ascii(sc)
                 if ch:
                     if not self.handle(ch):
                         return
                     self.draw()
-            neonpulse.halt()
+            scutoid.halt()
 
 def main():
     Calc().run()

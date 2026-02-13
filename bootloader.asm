@@ -212,30 +212,39 @@ protected_mode_start:
     ; By default, IRQ0-7 map to interrupts 0x08-0x0F (conflicts with CPU exceptions)
     ; We remap: IRQ0-7 -> 0x20-0x27, IRQ8-15 -> 0x28-0x2F
     
-    ; Remap PIC1
-    mov al, 0x11            ; ICW1: Initialize
+    ; Remap PIC1 (Master)
+    mov al, 0x11            ; ICW1: Initialize + ICW4 needed
     out 0x20, al
+    out 0x80, al            ; IO delay
     mov al, 0x20            ; ICW2: PIC1 offset to 0x20
     out 0x21, al
+    out 0x80, al
     mov al, 0x04            ; ICW3: IRQ2 connects to PIC2
     out 0x21, al
+    out 0x80, al
     mov al, 0x01            ; ICW4: 8086 mode
     out 0x21, al
+    out 0x80, al
     
-    ; Remap PIC2
+    ; Remap PIC2 (Slave)
     mov al, 0x11
     out 0xA0, al
+    out 0x80, al
     mov al, 0x28            ; ICW2: PIC2 offset to 0x28
     out 0xA1, al
+    out 0x80, al
     mov al, 0x02            ; ICW3: Connect to IRQ2 of PIC1
     out 0xA1, al
+    out 0x80, al
     mov al, 0x01
     out 0xA1, al
+    out 0x80, al
     
-    ; Unmask keyboard interrupt (IRQ1)
-    in al, 0x21
-    and al, 0xFD            ; Clear bit 1 (enable IRQ1)
+    ; Set PIC masks: enable only IRQ1 (keyboard) on PIC1, mask all on PIC2
+    mov al, 0xFD            ; Bit 1 clear = IRQ1 (keyboard) enabled, all others masked
     out 0x21, al
+    mov al, 0xFF            ; Mask all IRQ8-15
+    out 0xA1, al
     
     ; Set up IDT (Interrupt Descriptor Table)
     call setup_idt
@@ -344,7 +353,7 @@ halt:
 ; ============================================================================
 ; IDT BASE ADDRESS
 ; ============================================================================
-IDT_BASE equ 0x0000
+IDT_BASE equ 0xA000
 
 idt_descriptor:
     dw 256 * 8 - 1          ; Size of IDT (256 entries * 8 bytes)

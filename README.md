@@ -31,7 +31,7 @@ ScutoidOS/
 ├── main.py           # micropython shell (for later)
 ├── programs/         # apps (calculator, terminal, textedit)
 ├── installer/        # installs programs into Apps/
-└── neonpulse.img     # the bootable image
+└── scutoid.img     # the bootable image
 ```
 
 ## Memory layout

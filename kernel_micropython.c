@@ -86,51 +86,51 @@ void set_color(unsigned char color) {
 }
 
 // ============================================================================
-// Python Module: "neonpulse" - Hardware interface exposed to Python
+// Python Module: "scutoid" - Hardware interface exposed to Python
 // ============================================================================
 
-// neonpulse.print(str)
-STATIC mp_obj_t neonpulse_print(mp_obj_t str_obj) {
+// scutoid.print(str)
+STATIC mp_obj_t scutoid_print(mp_obj_t str_obj) {
     const char *str = mp_obj_str_get_str(str_obj);
     print(str);
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(neonpulse_print_obj, neonpulse_print);
+STATIC MP_DEFINE_CONST_FUN_OBJ_1(scutoid_print_obj, scutoid_print);
 
-// neonpulse.clear()
-STATIC mp_obj_t neonpulse_clear(void) {
+// scutoid.clear()
+STATIC mp_obj_t scutoid_clear(void) {
     clear_screen();
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(neonpulse_clear_obj, neonpulse_clear);
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(scutoid_clear_obj, scutoid_clear);
 
-// neonpulse.set_color(color)
-STATIC mp_obj_t neonpulse_set_color(mp_obj_t color_obj) {
+// scutoid.set_color(color)
+STATIC mp_obj_t scutoid_set_color(mp_obj_t color_obj) {
     unsigned char color = mp_obj_get_int(color_obj);
     set_color(color);
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(neonpulse_set_color_obj, neonpulse_set_color);
+STATIC MP_DEFINE_CONST_FUN_OBJ_1(scutoid_set_color_obj, scutoid_set_color);
 
-// neonpulse.keyboard_available()
-STATIC mp_obj_t neonpulse_keyboard_available(void) {
+// scutoid.keyboard_available()
+STATIC mp_obj_t scutoid_keyboard_available(void) {
     unsigned char write_idx = *KEYBOARD_BUFFER_WRITE_INDEX;
     unsigned char read_idx = *KEYBOARD_BUFFER_READ_INDEX;
     return mp_obj_new_bool(write_idx != read_idx);
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(neonpulse_keyboard_available_obj, neonpulse_keyboard_available);
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(scutoid_keyboard_available_obj, scutoid_keyboard_available);
 
-// neonpulse.keyboard_read()
-STATIC mp_obj_t neonpulse_keyboard_read(void) {
+// scutoid.keyboard_read()
+STATIC mp_obj_t scutoid_keyboard_read(void) {
     unsigned char read_idx = *KEYBOARD_BUFFER_READ_INDEX;
     unsigned char scancode = KEYBOARD_BUFFER[read_idx];
     *KEYBOARD_BUFFER_READ_INDEX = read_idx + 1;
     return mp_obj_new_int(scancode);
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(neonpulse_keyboard_read_obj, neonpulse_keyboard_read);
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(scutoid_keyboard_read_obj, scutoid_keyboard_read);
 
-// neonpulse.scancode_to_ascii(scancode)
-STATIC mp_obj_t neonpulse_scancode_to_ascii(mp_obj_t scancode_obj) {
+// scutoid.scancode_to_ascii(scancode)
+STATIC mp_obj_t scutoid_scancode_to_ascii(mp_obj_t scancode_obj) {
     static const char scancode_table[] = {
         0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
         '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
@@ -146,44 +146,44 @@ STATIC mp_obj_t neonpulse_scancode_to_ascii(mp_obj_t scancode_obj) {
     }
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(neonpulse_scancode_to_ascii_obj, neonpulse_scancode_to_ascii);
+STATIC MP_DEFINE_CONST_FUN_OBJ_1(scutoid_scancode_to_ascii_obj, scutoid_scancode_to_ascii);
 
-// neonpulse.halt()
-STATIC mp_obj_t neonpulse_halt(void) {
+// scutoid.halt()
+STATIC mp_obj_t scutoid_halt(void) {
     __asm__ volatile("hlt");
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(neonpulse_halt_obj, neonpulse_halt);
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(scutoid_halt_obj, scutoid_halt);
 
-// neonpulse.get_stack_pointer()
-STATIC mp_obj_t neonpulse_get_stack_pointer(void) {
+// scutoid.get_stack_pointer()
+STATIC mp_obj_t scutoid_get_stack_pointer(void) {
     unsigned int esp;
     __asm__ volatile("mov %%esp, %0" : "=r"(esp));
     return mp_obj_new_int(esp);
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(neonpulse_get_stack_pointer_obj, neonpulse_get_stack_pointer);
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(scutoid_get_stack_pointer_obj, scutoid_get_stack_pointer);
 
 // Define module
-STATIC const mp_rom_map_elem_t neonpulse_module_globals_table[] = {
-    { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_neonpulse) },
-    { MP_ROM_QSTR(MP_QSTR_print), MP_ROM_PTR(&neonpulse_print_obj) },
-    { MP_ROM_QSTR(MP_QSTR_clear), MP_ROM_PTR(&neonpulse_clear_obj) },
-    { MP_ROM_QSTR(MP_QSTR_set_color), MP_ROM_PTR(&neonpulse_set_color_obj) },
-    { MP_ROM_QSTR(MP_QSTR_keyboard_available), MP_ROM_PTR(&neonpulse_keyboard_available_obj) },
-    { MP_ROM_QSTR(MP_QSTR_keyboard_read), MP_ROM_PTR(&neonpulse_keyboard_read_obj) },
-    { MP_ROM_QSTR(MP_QSTR_scancode_to_ascii), MP_ROM_PTR(&neonpulse_scancode_to_ascii_obj) },
-    { MP_ROM_QSTR(MP_QSTR_halt), MP_ROM_PTR(&neonpulse_halt_obj) },
-    { MP_ROM_QSTR(MP_QSTR_get_stack_pointer), MP_ROM_PTR(&neonpulse_get_stack_pointer_obj) },
+STATIC const mp_rom_map_elem_t scutoid_module_globals_table[] = {
+    { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_scutoid) },
+    { MP_ROM_QSTR(MP_QSTR_print), MP_ROM_PTR(&scutoid_print_obj) },
+    { MP_ROM_QSTR(MP_QSTR_clear), MP_ROM_PTR(&scutoid_clear_obj) },
+    { MP_ROM_QSTR(MP_QSTR_set_color), MP_ROM_PTR(&scutoid_set_color_obj) },
+    { MP_ROM_QSTR(MP_QSTR_keyboard_available), MP_ROM_PTR(&scutoid_keyboard_available_obj) },
+    { MP_ROM_QSTR(MP_QSTR_keyboard_read), MP_ROM_PTR(&scutoid_keyboard_read_obj) },
+    { MP_ROM_QSTR(MP_QSTR_scancode_to_ascii), MP_ROM_PTR(&scutoid_scancode_to_ascii_obj) },
+    { MP_ROM_QSTR(MP_QSTR_halt), MP_ROM_PTR(&scutoid_halt_obj) },
+    { MP_ROM_QSTR(MP_QSTR_get_stack_pointer), MP_ROM_PTR(&scutoid_get_stack_pointer_obj) },
 };
-STATIC MP_DEFINE_CONST_DICT(neonpulse_module_globals, neonpulse_module_globals_table);
+STATIC MP_DEFINE_CONST_DICT(scutoid_module_globals, scutoid_module_globals_table);
 
-const mp_obj_module_t neonpulse_module = {
+const mp_obj_module_t scutoid_module = {
     .base = { &mp_type_module },
-    .globals = (mp_obj_dict_t *)&neonpulse_module_globals,
+    .globals = (mp_obj_dict_t *)&scutoid_module_globals,
 };
 
 // Register module
-MP_REGISTER_MODULE(MP_QSTR_neonpulse, neonpulse_module);
+MP_REGISTER_MODULE(MP_QSTR_scutoid, scutoid_module);
 
 // ============================================================================
 // MicroPython Setup
@@ -233,19 +233,19 @@ void __assert_func(const char *file, int line, const char *func, const char *exp
 // For now, we'll use a simple inline Python string
 const char *python_main = 
 "print('Python kernel starting...')\n"
-"import neonpulse\n"
-"neonpulse.clear()\n"
-"neonpulse.set_color(0x0E)\n"
-"neonpulse.print('PYTHON IS RUNNING!\\n')\n"
-"neonpulse.set_color(0x07)\n"
+"import scutoid\n"
+"scutoid.clear()\n"
+"scutoid.set_color(0x0E)\n"
+"scutoid.print('PYTHON IS RUNNING!\\n')\n"
+"scutoid.set_color(0x07)\n"
 "while True:\n"
-"    if neonpulse.keyboard_available():\n"
-"        sc = neonpulse.keyboard_read()\n"
+"    if scutoid.keyboard_available():\n"
+"        sc = scutoid.keyboard_read()\n"
 "        if sc < 128:\n"  // Make code only
-"            ch = neonpulse.scancode_to_ascii(sc)\n"
+"            ch = scutoid.scancode_to_ascii(sc)\n"
 "            if ch:\n"
-"                neonpulse.print(ch)\n"
-"    neonpulse.halt()\n";
+"                scutoid.print(ch)\n"
+"    scutoid.halt()\n";
 
 void kernel_main(void) {
     // Hardware initialization

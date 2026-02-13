@@ -1,0 +1,10 @@
+{
+    "name": "sde",
+    "display_name": "Scutoid Development Enviornment",
+    "version": "1.0.0",
+    "type": "application",
+    "main": "main.py",
+    "description": "Create an app for ScutoidOS",
+    "author": "Scutoid",
+    "category": "System"
+}

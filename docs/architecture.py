@@ -10,7 +10,7 @@ diagram = """
 ╚═══════════════════════════════════════════════════════════════════════════╝
 
 ┌───────────────────────────────────────────────────────────────────────────┐
-│ DISK IMAGE (neonpulse.img)                                                │
+│ DISK IMAGE (scutoid.img)                                                │
 ├───────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
 │  Sector 0 (512 bytes)                                                     │
@@ -40,27 +40,27 @@ diagram = """
 │  │  │ • Built-in types (list, dict, etc.)                       │  │     │
 │  │  └───────────────────────────────────────────────────────────┘  │     │
 │  │  ┌───────────────────────────────────────────────────────────┐  │     │
-│  │  │ Custom Module: "neonpulse" (neonpulse_module.c)          │  │     │
+│  │  │ Custom Module: "scutoid" (scutoid_module.c)          │  │     │
 │  │  │ Exposes C functions to Python:                            │  │     │
-│  │  │   • neonpulse.print(str)                                  │  │     │
-│  │  │   • neonpulse.clear()                                     │  │     │
-│  │  │   • neonpulse.set_color(color)                            │  │     │
-│  │  │   • neonpulse.keyboard_read()                             │  │     │
-│  │  │   • neonpulse.halt()                                      │  │     │
+│  │  │   • scutoid.print(str)                                  │  │     │
+│  │  │   • scutoid.clear()                                     │  │     │
+│  │  │   • scutoid.set_color(color)                            │  │     │
+│  │  │   • scutoid.keyboard_read()                             │  │     │
+│  │  │   • scutoid.halt()                                      │  │     │
 │  │  └───────────────────────────────────────────────────────────┘  │     │
 │  │  ┌───────────────────────────────────────────────────────────┐  │     │
 │  │  │ YOUR PYTHON CODE! (main.py - frozen as bytecode)         │  │     │
 │  │  │                                                            │  │     │
-│  │  │   import neonpulse                                        │  │     │
+│  │  │   import scutoid                                        │  │     │
 │  │  │                                                            │  │     │
 │  │  │   class OS:                                               │  │     │
 │  │  │       def run(self):                                      │  │     │
-│  │  │           neonpulse.print("Hello from Python!")           │  │     │
+│  │  │           scutoid.print("Hello from Python!")           │  │     │
 │  │  │           while True:                                     │  │     │
-│  │  │               if neonpulse.keyboard_available():          │  │     │
-│  │  │                   key = neonpulse.keyboard_read()         │  │     │
+│  │  │               if scutoid.keyboard_available():          │  │     │
+│  │  │                   key = scutoid.keyboard_read()         │  │     │
 │  │  │                   # Your OS logic here!                   │  │     │
-│  │  │               neonpulse.halt()                            │  │     │
+│  │  │               scutoid.halt()                            │  │     │
 │  │  │                                                            │  │     │
 │  │  │   OS().run()  ← This becomes your OS!                    │  │     │
 │  │  │                                                            │  │     │
@@ -111,7 +111,7 @@ diagram = """
           ⋮                                          ⋮
   0xB8000 ├══════════════════════════════════════════┤
           │ VGA Text Buffer (80x25 characters)       │
-          │ Python writes here via neonpulse.print() │
+          │ Python writes here via scutoid.print() │
   0xC0000 └──────────────────────────────────────────┘
 
 ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -124,7 +124,7 @@ diagram = """
 4. Bootloader loads:     kernel.bin → 0x10000 in RAM
 5. C initializes:        MicroPython interpreter
 6. Python executes:      Your main.py code runs!
-7. Python calls:         neonpulse.print() → C function → VGA hardware
+7. Python calls:         scutoid.print() → C function → VGA hardware
 
 Everything is ONE BINARY - no filesystem needed!
 """

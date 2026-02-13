@@ -1,10 +1,10 @@
 {
-    "name": "Calculator",
+    "name": "calculator",
     "display_name": "Calculator",
     "version": "1.0.0",
     "type": "application",
     "main": "main.py",
-    "description": "Basic calculator application",
-    "author": "ScutoidOS",
+    "description": "calculator ",
+    "author": "Scutoid",
     "category": "Utilities"
 }

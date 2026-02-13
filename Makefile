@@ -10,12 +10,13 @@ CFLAGS = -m32 -ffreestanding -fno-pie -nostdlib -nostdinc -fno-builtin -fno-stac
 LDFLAGS = -m elf_i386 -T linker.ld --oformat binary
 
 BOOTLOADER_BIN = bootloader.bin
-KERNEL_OBJ = kernel.o
+KERNEL_OBJ = kernel.o terminal.o
 KERNEL_BIN = kernel.bin
-OS_IMAGE = neonpulse.img
+OS_IMAGE = scutoid.img
 
 BOOTLOADER_SRC = bootloader.asm
 KERNEL_SRC = kernel.c
+TERMINAL_SRC = terminal.c
 
 .PHONY: all clean run debug
 
@@ -28,9 +29,13 @@ $(BOOTLOADER_BIN): $(BOOTLOADER_SRC)
 	@echo "[asm] bootloader"
 	$(ASM) $(ASMFLAGS) $(BOOTLOADER_SRC) -o $(BOOTLOADER_BIN)
 
-$(KERNEL_OBJ): $(KERNEL_SRC)
+kernel.o: $(KERNEL_SRC) terminal.h interrupt.h
 	@echo "[cc] kernel"
-	$(CC) $(CFLAGS) -c $(KERNEL_SRC) -o $(KERNEL_OBJ)
+	$(CC) $(CFLAGS) -c $(KERNEL_SRC) -o kernel.o
+
+terminal.o: $(TERMINAL_SRC) terminal.h interrupt.h
+	@echo "[cc] terminal"
+	$(CC) $(CFLAGS) -c $(TERMINAL_SRC) -o terminal.o
 
 $(KERNEL_BIN): $(KERNEL_OBJ) linker.ld
 	@echo "[ld] kernel"
@@ -52,7 +57,7 @@ debug: $(OS_IMAGE)
 	qemu-system-i386 -drive format=raw,file=$(OS_IMAGE) -d int,cpu_reset -no-reboot
 
 clean:
-	rm -f $(BOOTLOADER_BIN) $(KERNEL_OBJ) $(KERNEL_BIN) $(OS_IMAGE)
+	rm -f $(BOOTLOADER_BIN) kernel.o terminal.o $(KERNEL_BIN) $(OS_IMAGE)
 	@echo "clean."
 
 info:

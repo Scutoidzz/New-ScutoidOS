@@ -1,10 +1,10 @@
 {
-    "name": "TextEdit",
-    "display_name": "TextEdit",
+    "name": "editor",
+    "display_name": "Editor",
     "version": "1.0.0",
     "type": "application",
     "main": "main.py",
-    "description": "Simple text editor for ScutoidOS",
-    "author": "ScutoidOS",
+    "description": "Simple text editor",
+    "author": "Scutoid",
     "category": "Productivity"
 }

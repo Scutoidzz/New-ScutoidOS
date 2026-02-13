@@ -58,7 +58,7 @@ def build(boot_path, kern_path, out_path):
 if __name__ == "__main__":
     boot = sys.argv[1] if len(sys.argv) > 1 else "bootloader.bin"
     kern = sys.argv[2] if len(sys.argv) > 2 else "kernel.bin"
-    out  = sys.argv[3] if len(sys.argv) > 3 else "neonpulse.img"
+    out  = sys.argv[3] if len(sys.argv) > 3 else "scutoid.img"
 
     print("ScutoidOS image builder")
     print("=" * 40)

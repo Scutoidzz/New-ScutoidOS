@@ -6,6 +6,10 @@
  * where the bootloader jumps to
  */
 
+#include "interrupt.h"
+#include "gdt.h"
+#include "idt.h"
+
 #define VGA_MEMORY 0xB8000
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
@@ -58,7 +62,7 @@ void kernel_main(void) {
 
     prompt();
 
-    __asm__ volatile("sti");  // Enable interrupts
+    enable_interrupts();
 
     while (1) {
         if (kb_available()) {
